@@ -35,6 +35,6 @@ class Category:
     @property
     def products(self) -> str:
         """Геттер для вывода списка товаров в нужном формате"""
-        products_list = [f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт."
+        products_list = [f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт.\n"
                          for product in self.__products]
         return "\n".join(products_list)
