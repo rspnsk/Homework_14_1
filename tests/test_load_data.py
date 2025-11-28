@@ -1,8 +1,8 @@
 import json
 from unittest.mock import mock_open, patch
-
-from src.categories_products import Category, Product
+from src.categories import Category
 from src.load_data import load_data_from_json
+from src.products import Product
 
 # Подготавливаем тестовые данные
 test_data = [
@@ -46,10 +46,10 @@ def test_successful_load() -> None:
         )
 
         # Проверяем количество товаров в первой категории
-        assert len(smartphones.products) == 3
+        assert len(smartphones._Category__products) == 3
 
         # Проверяем первый товар в первой категории
-        samsung = smartphones.products[0]
+        samsung = smartphones._Category__products[0]  # Обращаемся к приватному атрибуту напрямую
         assert isinstance(samsung, Product)
         assert samsung.name == "Samsung Galaxy C23 Ultra"
         assert samsung.description == "256GB, Серый цвет, 200MP камера"
@@ -57,14 +57,14 @@ def test_successful_load() -> None:
         assert samsung.quantity == 5
 
         # Проверяем второй товар в первой категории
-        iphone = smartphones.products[1]
+        iphone = smartphones._Category__products[1]
         assert isinstance(iphone, Product)
         assert iphone.name == "Iphone 15"
         assert iphone.price == 210000.0
         assert iphone.quantity == 8
 
         # Проверяем третий товар в первой категории
-        xiaomi = smartphones.products[2]
+        xiaomi = smartphones._Category__products[2]
         assert isinstance(xiaomi, Product)
         assert xiaomi.name == "Xiaomi Redmi Note 11"
         assert xiaomi.price == 31000.0
@@ -80,8 +80,8 @@ def test_successful_load() -> None:
         )
 
         # Проверяем товар во второй категории
-        assert len(tv.products) == 1
-        tv_product = tv.products[0]
+        assert len(tv._Category__products) == 1
+        tv_product = tv._Category__products[0]
         assert isinstance(tv_product, Product)
         assert tv_product.name == '55" QLED 4K'
         assert tv_product.price == 123000.0

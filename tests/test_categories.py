@@ -1,4 +1,6 @@
-from src.categories_products import Category, Product
+import pytest
+from src.categories import Category
+from src.products import Product
 
 
 def test_category_init() -> None:
@@ -6,44 +8,48 @@ def test_category_init() -> None:
     category1 = Category("Электроника", "Электронные устройства")
     assert category1.name == "Электроника"
     assert category1.description == "Электронные устройства"
-    assert category1.products == []
     assert Category.category_count == 1
     assert Category.product_count == 0
 
-    # Тест 2: Создание категории с товарами
-    product1 = Product(name="Телефон", description="Смартфон последней модели", price=29999, quantity=10)
 
-    category2 = Category("Электроника", "Электронные устройства")
-    category2.add_product(product1)
+def test_init_with_products(category1):
+    # Проверка, что при создании категории атрибуты инициализировались корректно
+    assert category1.name == "Электроника"
+    assert category1.description == "Электронные устройства"
+    assert len(category1._Category__products) == 1  # Проверка приватного атрибута
 
-    assert category2.products[0].name == "Телефон"
-    assert category2.products[0].description == "Смартфон последней модели"
-    assert category2.products[0].price == 29999
-    assert category2.products[0].quantity == 10
-    assert Category.category_count == 2
+
+# Тест добавления товара в категорию
+def test_add_product(category1, apple_product):
+    # Создадим новый продукт
+    product2 = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
+    category1.add_product(product2)
+
+    # Проверим, что продукт успешно добавлен
+    assert len(category1._Category__products) == 2
+    assert category1._Category__products[-1] == product2
+
+
+# Тест на невозможность добавления объекта, не являющегося Product
+def test_add_product_invalid_type(category1):
+    # Проверим, что нельзя добавить объект, не являющийся Product
+    with pytest.raises(TypeError):
+        category1.add_product("Некорректный объект")
+
+
+# Тест геттера для вывода списка товаров
+def test_products_property(category1):
+    # Проверим геттер для вывода списка товаров
+    expected_output = "Iphone 15, 210000.0 руб. Остаток: 8 шт."
+    assert category1.products == expected_output
+
+
+# Тест глобальных счётчиков категорий и товаров
+def test_class_attributes(category1):
+    # Проверим, что при создании и добавлении товаров обновляются общие счётчики
+    assert Category.category_count == 1
     assert Category.product_count == 1
 
-    # Тест 3: Проверка сброса счетчиков при создании новых категорий
-    Category.category_count = 0
-    Category.product_count = 0
-    category3 = Category("Бытовая техника", "Техника для дома")
-    assert Category.category_count == 1
-    assert Category.product_count == 0
-    assert category3.name == "Бытовая техника"  # Добавляем дополнительное утверждение
-
-
-def test_category_count() -> None:
-    # Очищаем счетчик перед тестом
-    Category.category_count = 0
-
-    # Создаем несколько категорий для проверки подсчета
-    Category("Категория 1", "Описание 1")
-    Category("Категория 2", "Описание 2")
-    Category("Категория 3", "Описание 3")
-
-    # Проверяем общее количество категорий
-    assert Category.category_count == 3, f"Ожидалось 3, получено {Category.category_count}"
-
-    # Дополнительно проверяем, что счетчик сбрасывается корректно
-    Category.category_count = 0
-    assert Category.category_count == 0
+    # Добавим ещё один товар
+    category1.add_product(Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5))
+    assert Category.product_count == 2

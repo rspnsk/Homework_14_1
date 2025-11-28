@@ -1,7 +1,8 @@
 import json
 from typing import List
 
-from src.categories_products import Category, Product
+from src.categories import Category
+from src.products import Product
 
 
 def load_data_from_json(file_path: str) -> List[Category]:
