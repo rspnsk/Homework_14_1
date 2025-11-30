@@ -23,6 +23,12 @@ class Category:
         # Учитываем количество товаров в новой категории
         Category.product_count += len(self.__products)
 
+    def __str__(self):
+        quantity_sum = 0
+        for product in self.__products:
+            quantity_sum += product.quantity
+        return f"{self.name}, количество продуктов: {quantity_sum} шт."
+
     def add_product(self, product: Product) -> None:
         """Добавить товар в категорию."""
         if isinstance(product, Product):
@@ -33,8 +39,26 @@ class Category:
             raise TypeError("Можно добавлять только объекты класса Product")
 
     @property
-    def products(self) -> str:
-        """Геттер для вывода списка товаров в нужном формате"""
-        products_list = [f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт.\n"
-                         for product in self.__products]
-        return "\n".join(products_list)
+    def products(self) -> list[Product]:
+        """Геттер для получения списка товаров, что бы работать с этими объектами напрямую,
+        а не с их строковым представлением."""
+        return self.__products
+
+
+class CategoryIterator:
+    """ Класс для итерации продуктов одной категории. Принимает на вход объект класса Category
+    и производит итерацию по товарам, которые хранятся в данной категории."""
+    def __init__(self, category: Category):
+        self.category = category
+        self.index = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.index < len(self.category.products):
+            result = self.category.products[self.index]
+            self.index += 1
+            return result
+        else:
+            raise StopIteration

@@ -1,5 +1,5 @@
 import pytest
-from src.categories import Category
+from src.categories import Category, CategoryIterator
 from src.products import Product
 
 
@@ -37,11 +37,11 @@ def test_add_product_invalid_type(category1):
         category1.add_product("Некорректный объект")
 
 
-# Тест геттера для вывода списка товаров
-def test_products_property(category1):
-    # Проверим геттер для вывода списка товаров
-    expected_output = "Iphone 15, 210000.0 руб. Остаток: 8 шт."
-    assert category1.products == expected_output
+# # Тест геттера для вывода списка товаров
+# def test_products_property(category1):
+#     # Проверим геттер для вывода списка товаров
+#     expected_output = "Iphone 15, 210000.0 руб. Остаток: 8 шт."
+#     assert category1.products == expected_output
 
 
 # Тест глобальных счётчиков категорий и товаров
@@ -53,3 +53,70 @@ def test_class_attributes(category1):
     # Добавим ещё один товар
     category1.add_product(Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5))
     assert Category.product_count == 2
+
+
+# К ДЗ 15.1
+# Тест успешного обхода товаров
+def test_iterator_successfully_iterate(category):
+    iterator = CategoryIterator(category)
+    products = list(iterator)
+    assert len(products) == 3
+    assert products[0].name == "Samsung Galaxy S23 Ultra"
+    assert products[1].name == "Iphone 15"
+    assert products[2].name == "Xiaomi Redmi Note 11"
+
+
+# Тест останова итерации после последнего элемента
+def test_stop_iteration(category):
+    iterator = CategoryIterator(category)
+    # Перебираем все товары
+    for _ in range(len(category.products)):
+        next(iterator)
+    # Следующий вызов должен вызвать StopIteration
+    with pytest.raises(StopIteration):
+        next(iterator)
+
+
+# Тест пустой категории
+def test_empty_category():
+    empty_category = Category("Телевизоры", "чтобы смотреть")
+    iterator = CategoryIterator(empty_category)
+    # Категория пустая, итерация должна закончиться немедленно
+    with pytest.raises(StopIteration):
+        next(iterator)
+
+
+# Тест проверка работы метода метод __str__ для class Category
+def test_str_category(category):
+    assert str(category) == "Смартфоны, количество продуктов: 27 шт."
+
+
+# Тест проверка работы метода метод __str__ для class Product
+def test_str_product(apple_product):
+    assert str(apple_product) == "Iphone 15, 210000.0 руб. Остаток: 8 шт."
+
+
+# Тест успешного сложения двух объектов Product
+def test_add_two_products(apple_product, samsung_product):
+    # Сложение двух объектов Product
+    result = apple_product + samsung_product
+    # Проверяем, что результат корректен
+    expected_total = ((apple_product._Product__price * apple_product.quantity)
+                      + (samsung_product._Product__price * samsung_product.quantity))
+    assert result == expected_total
+
+
+# Тест ошибки при сложении с объектом другого типа
+def test_add_with_wrong_type(apple_product):
+    # Проверяем, что при сложении с объектом другого типа поднимается исключение
+    with pytest.raises(TypeError):
+        apple_product + "Некорректный объект"
+
+
+# Тест геттера products
+def test_products_getter(category1, apple_product):
+    # Проверяем, что геттер возвращает корректный список товаров
+    products = category1.products
+    assert isinstance(products, list)
+    assert len(products) == 1
+    assert products[0] == apple_product
