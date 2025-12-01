@@ -14,6 +14,19 @@ class Product:
         self.__price = price
         self.quantity = quantity
 
+    def __str__(self):
+        """ Магический метод __str__, который возвращает строку:
+        Название продукта, X руб. Остаток: X шт."""
+        return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other):
+        """ Магический метод сложения __add__, который принимает два аргумента: self и второй объект.
+        Метод возвращает сумму произведений цены на количество у двух объектов."""
+        if isinstance(other, Product):
+            return (self.__price * self.quantity) + (other.__price * other.quantity)
+        else:
+            raise TypeError("Нельзя складывать объект Product с объектом другого типа.")
+
     @classmethod
     def new_product(cls, product_dict):
         """
@@ -33,7 +46,7 @@ class Product:
     @property
     def products(self):
         """ Геттер для вывода списка товаров в нужном формате """
-        return f'{self.name}, {self.__price} руб.Остаток: {self.quantity} шт.'
+        return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
 
     @price.setter
     def price(self, new_price):
