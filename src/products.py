@@ -74,7 +74,7 @@ class Smartphone(Product):
     def __add__(self, other):
         """ Магический метод сложения __add__, который принимает два аргумента: self и второй объект.
         Метод возвращает сумму произведений цены на количество у двух объектов."""
-        if isinstance(other, Smartphone):
+        if type(other) is Smartphone:
             return (self.price * self.quantity) + (other.price * other.quantity)
         else:
             raise TypeError("Нельзя складывать объект Smartphone с объектом другого типа.")
@@ -90,7 +90,7 @@ class LawnGrass(Product):
     def __add__(self, other):
         """ Магический метод сложения __add__, который принимает два аргумента: self и второй объект.
         Метод возвращает сумму произведений цены на количество у двух объектов."""
-        if isinstance(other, LawnGrass):
+        if type(other) is LawnGrass:
             return (self.price * self.quantity) + (other.price * other.quantity)
         else:
             raise TypeError("Нельзя складывать объект LawnGrass с объектом другого типа.")
