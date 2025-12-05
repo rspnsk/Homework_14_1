@@ -61,3 +61,36 @@ class Product:
                 self.__price = new_price
             else:
                 print("Изменение цены отменено")
+
+
+class Smartphone(Product):
+    def __init__(self, name: str, description: str, price: float, quantity: int, efficiency: float, model: str, memory: int, color: str):
+        super().__init__(name, description, price, quantity)
+        self.efficiency = efficiency
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+    def __add__(self, other):
+        """ Магический метод сложения __add__, который принимает два аргумента: self и второй объект.
+        Метод возвращает сумму произведений цены на количество у двух объектов."""
+        if isinstance(other, Smartphone):
+            return (self.price * self.quantity) + (other.price * other.quantity)
+        else:
+            raise TypeError("Нельзя складывать объект Smartphone с объектом другого типа.")
+
+
+class LawnGrass(Product):
+    def __init__(self, name: str, description: str, price: float, quantity: int, country: str, germination_period: str, color: str):
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.germination_period = germination_period
+        self.color = color
+
+    def __add__(self, other):
+        """ Магический метод сложения __add__, который принимает два аргумента: self и второй объект.
+        Метод возвращает сумму произведений цены на количество у двух объектов."""
+        if isinstance(other, LawnGrass):
+            return (self.price * self.quantity) + (other.price * other.quantity)
+        else:
+            raise TypeError("Нельзя складывать объект LawnGrass с объектом другого типа.")
