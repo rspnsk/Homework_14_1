@@ -20,12 +20,12 @@ class Product:
         return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other):
-        """ Магический метод сложения __add__, который принимает два аргумента: self и второй объект.
-        Метод возвращает сумму произведений цены на количество у двух объектов."""
-        if isinstance(other, Product):
+        """Магический метод сложения __add__, который принимает два аргумента: self и второй объект.
+        Метод возвращает сумму произведений цены на количество у двух объектов, если они одного типа."""
+        if type(self) is type(other):  # Проверяем, что объекты относятся к одному классу
             return (self.__price * self.quantity) + (other.__price * other.quantity)
         else:
-            raise TypeError("Нельзя складывать объект Product с объектом другого типа.")
+            raise TypeError("Нельзя складывать объекты разных классов.")
 
     @classmethod
     def new_product(cls, product_dict):
@@ -71,14 +71,6 @@ class Smartphone(Product):
         self.memory = memory
         self.color = color
 
-    def __add__(self, other):
-        """ Магический метод сложения __add__, который принимает два аргумента: self и второй объект.
-        Метод возвращает сумму произведений цены на количество у двух объектов."""
-        if type(other) is Smartphone:
-            return (self.price * self.quantity) + (other.price * other.quantity)
-        else:
-            raise TypeError("Нельзя складывать объект Smartphone с объектом другого типа.")
-
 
 class LawnGrass(Product):
     def __init__(self, name: str, description: str, price: float, quantity: int, country: str, germination_period: str, color: str):
@@ -86,11 +78,3 @@ class LawnGrass(Product):
         self.country = country
         self.germination_period = germination_period
         self.color = color
-
-    def __add__(self, other):
-        """ Магический метод сложения __add__, который принимает два аргумента: self и второй объект.
-        Метод возвращает сумму произведений цены на количество у двух объектов."""
-        if type(other) is LawnGrass:
-            return (self.price * self.quantity) + (other.price * other.quantity)
-        else:
-            raise TypeError("Нельзя складывать объект LawnGrass с объектом другого типа.")

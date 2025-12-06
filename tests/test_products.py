@@ -1,5 +1,6 @@
 from src.categories import Product
 from src.products import Smartphone, LawnGrass
+import pytest
 
 
 def test_init() -> None:
@@ -87,3 +88,20 @@ def test_price_getter_and_setter(apple_product):
 
     # Проверим, что цена осталась старой после неудачной попытки изменения
     assert apple_product.price == 220000.0
+
+
+# Тест успешного сложения двух объектов Product
+def test_add_two_products(apple_product, samsung_product):
+    # Сложение двух объектов Product
+    result = apple_product + samsung_product
+    # Проверяем, что результат корректен
+    expected_total = ((apple_product._Product__price * apple_product.quantity)
+                      + (samsung_product._Product__price * samsung_product.quantity))
+    assert result == expected_total
+
+
+# Тест ошибки при сложении с объектом другого типа
+def test_add_with_wrong_type(apple_product):
+    # Проверяем, что при сложении с объектом другого типа поднимается исключение
+    with pytest.raises(TypeError):
+        apple_product + "Некорректный объект"
