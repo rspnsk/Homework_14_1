@@ -1,17 +1,54 @@
 from src.categories import Product
+from src.products import Smartphone, LawnGrass
+import pytest
 
 
 def test_init() -> None:
-    """Тест проверки корректности инициализации объекта"""
+    """Тест проверки корректности инициализации объекта класса Product"""
     product = Product(
-        name="Смартфон", description="Современный смартфон с большим экраном", price=29999.99, quantity=10
+        name="Samsung Galaxy S23 Ultra", description="256GB, Серый цвет, 200MP камера", price=180000.0, quantity=5
     )
 
     # Проверяем, что все атрибуты установлены правильно
-    assert product.name == "Смартфон"
-    assert product.description == "Современный смартфон с большим экраном"
-    assert product.price == 29999.99
-    assert product.quantity == 10
+    assert product.name == "Samsung Galaxy S23 Ultra"
+    assert product.description == "256GB, Серый цвет, 200MP камера"
+    assert product.price == 180000.0
+    assert product.quantity == 5
+
+
+def test_init_Smartphone() -> None:
+    """Тест проверки корректности инициализации объекта класса Smartphone"""
+    product_Smartphone = Smartphone(
+        name="Samsung Galaxy S23 Ultra", description="256GB, Серый цвет, 200MP камера", price=180000.0, quantity=5,
+        efficiency=95.5, model="S23 Ultra", memory=256, color="Серый"
+    )
+
+    # Проверяем, что все атрибуты установлены правильно
+    assert product_Smartphone.name == "Samsung Galaxy S23 Ultra"
+    assert product_Smartphone.description == "256GB, Серый цвет, 200MP камера"
+    assert product_Smartphone.price == 180000.0
+    assert product_Smartphone.quantity == 5
+    assert product_Smartphone.efficiency == 95.5
+    assert product_Smartphone.model == "S23 Ultra"
+    assert product_Smartphone.memory == 256
+    assert product_Smartphone.color == "Серый"
+
+
+def test_init_LawnGrass() -> None:
+    """Тест проверки корректности инициализации объекта класса LawnGrass"""
+    product_LawnGrass = LawnGrass(
+        name="Samsung Galaxy S23 Ultra", description="256GB, Серый цвет, 200MP камера", price=180000.0, quantity=5,
+        country="Россия", germination_period="7 дней", color="Зеленый"
+    )
+
+    # Проверяем, что все атрибуты установлены правильно
+    assert product_LawnGrass.name == "Samsung Galaxy S23 Ultra"
+    assert product_LawnGrass.description == "256GB, Серый цвет, 200MP камера"
+    assert product_LawnGrass.price == 180000.0
+    assert product_LawnGrass.quantity == 5
+    assert product_LawnGrass.country == "Россия"
+    assert product_LawnGrass.germination_period == "7 дней"
+    assert product_LawnGrass.color == "Зеленый"
 
 
 def test_init_types() -> None:
@@ -28,7 +65,7 @@ def test_init_types() -> None:
 
 
 def test_new_product(product_dict):
-    """ тест проверки создания нового экземпляра из словаря"""
+    """ Тест проверки создания нового экземпляра из словаря"""
     assert Product.new_product(product_dict).name == "Iphone 15"
     assert Product.new_product(product_dict).description == "512GB, Gray space"
     assert Product.new_product(product_dict).price == 210000.0
@@ -51,3 +88,20 @@ def test_price_getter_and_setter(apple_product):
 
     # Проверим, что цена осталась старой после неудачной попытки изменения
     assert apple_product.price == 220000.0
+
+
+# Тест успешного сложения двух объектов Product
+def test_add_two_products(apple_product, samsung_product):
+    # Сложение двух объектов Product
+    result = apple_product + samsung_product
+    # Проверяем, что результат корректен
+    expected_total = ((apple_product._Product__price * apple_product.quantity)
+                      + (samsung_product._Product__price * samsung_product.quantity))
+    assert result == expected_total
+
+
+# Тест ошибки при сложении с объектом другого типа
+def test_add_with_wrong_type(apple_product):
+    # Проверяем, что при сложении с объектом другого типа поднимается исключение
+    with pytest.raises(TypeError):
+        apple_product + "Некорректный объект"

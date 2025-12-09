@@ -20,12 +20,12 @@ class Product:
         return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other):
-        """ Магический метод сложения __add__, который принимает два аргумента: self и второй объект.
-        Метод возвращает сумму произведений цены на количество у двух объектов."""
-        if isinstance(other, Product):
+        """Магический метод сложения __add__, который принимает два аргумента: self и второй объект.
+        Метод возвращает сумму произведений цены на количество у двух объектов, если они одного типа."""
+        if type(self) is type(other):  # Проверяем, что объекты относятся к одному классу
             return (self.__price * self.quantity) + (other.__price * other.quantity)
         else:
-            raise TypeError("Нельзя складывать объект Product с объектом другого типа.")
+            raise TypeError("Нельзя складывать объекты разных классов.")
 
     @classmethod
     def new_product(cls, product_dict):
@@ -61,3 +61,20 @@ class Product:
                 self.__price = new_price
             else:
                 print("Изменение цены отменено")
+
+
+class Smartphone(Product):
+    def __init__(self, name: str, description: str, price: float, quantity: int, efficiency: float, model: str, memory: int, color: str):
+        super().__init__(name, description, price, quantity)
+        self.efficiency = efficiency
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+
+class LawnGrass(Product):
+    def __init__(self, name: str, description: str, price: float, quantity: int, country: str, germination_period: str, color: str):
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.germination_period = germination_period
+        self.color = color
