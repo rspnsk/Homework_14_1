@@ -1,6 +1,7 @@
+from src.Abstract_class import BaseProduct, MixinPrint
 
 
-class Product:
+class Product(MixinPrint, BaseProduct):
     def __init__(self, name: str, description: str, price: float, quantity: int):
         """
         Класс для представления товара.
@@ -13,6 +14,7 @@ class Product:
         self.description = description
         self.__price = price
         self.quantity = quantity
+        super().__init__()
 
     def __str__(self):
         """ Магический метод __str__, который возвращает строку:
