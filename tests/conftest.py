@@ -22,6 +22,12 @@ def samsung_product():
     return Product("Samsung Galaxy S23 Ultra", "Samsung Galaxy S23 Ultra", 180000.0, 5)
 
 
+# Фикстура для создания категории с товарами
+@pytest.fixture
+def fruits_category(apple_product, samsung_product):
+    return Category("Электроника", "Электронные устройства", [apple_product, samsung_product])
+
+
 # Фикстура для категории
 @pytest.fixture
 def category1(apple_product):
@@ -55,3 +61,9 @@ def category(product_fixtures):
     for product in product_fixtures:
         category.add_product(product)
     return category
+
+
+# Фикстура для пустой категории
+@pytest.fixture
+def empty_category():
+    return Category("Пустая категория", "Категория без продуктов", [])
