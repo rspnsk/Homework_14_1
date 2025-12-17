@@ -103,3 +103,16 @@ def test_products_getter(category1, apple_product):
     assert isinstance(products, list)
     assert len(products) == 1
     assert products[0] == apple_product
+
+
+# Тест среднего значения цены, при наличии товаров
+def test_middle_price_with_products(fruits_category):
+    # Средняя цена: (210000.0 + 180000.0) / 2 = 195000.0
+    result = fruits_category.middle_price()
+    assert result == 195000.0
+
+
+# Тест среднего значения при отсутствии товаров
+def test_middle_price_without_products(empty_category):
+    result = empty_category.middle_price()
+    assert result == 0

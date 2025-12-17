@@ -38,6 +38,17 @@ class Category:
         else:
             raise TypeError("Можно добавлять только объекты класса Product")
 
+    def middle_price(self):
+        """Метод, который подсчитывает средний ценник всех товаров, и
+        когда в категории нет товаров и сумма всех товаров будет делиться на ноль,
+        возвращает ноль."""
+        try:
+            total_price = sum(product.price for product in self.__products)
+            average_price = total_price / len(self.__products)
+            return average_price
+        except ZeroDivisionError:
+            return 0
+
     @property
     def products(self) -> list[Product]:
         """Геттер для получения списка товаров, что бы работать с этими объектами напрямую,
